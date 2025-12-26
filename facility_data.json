@@ -1,0 +1,126 @@
+{
+  "facilities": [
+    {
+      "facility_id": "FAC001",
+      "hospital_name": "Government Hospital, Delhi",
+      "room_id": "ROOM101",
+      "ward": "General Ward-1",
+      "facility_type": "room",
+      "cleanliness_score": 9,
+      "comfort_score": 7,
+      "maintenance_status": "GOOD",
+      "last_inspection_date": "2024-01-20",
+      "issues_count": 1,
+      "avg_rating": 8.0,
+      "inspector_notes": "Excellent cleanliness, minor window repair needed"
+    },
+    {
+      "facility_id": "FAC002",
+      "hospital_name": "Government Hospital, Delhi",
+      "food_id": "FOOD001",
+      "facility_type": "food",
+      "menu_variety": 6,
+      "taste_rating": 5,
+      "hygiene_score": 9,
+      "nutritional_value": 7,
+      "food_freshness": 8,
+      "avg_rating": 7.0,
+      "weekly_complaints": 0,
+      "inspector_notes": "Good hygiene standards, limited vegetarian options"
+    },
+    {
+      "facility_id": "FAC003",
+      "hospital_name": "Government Medical College Hospital, Mumbai",
+      "room_id": "ROOM201",
+      "ward": "Cardiology Ward",
+      "facility_type": "room",
+      "cleanliness_score": 8,
+      "comfort_score": 6,
+      "maintenance_status": "FAIR",
+      "last_inspection_date": "2024-01-19",
+      "issues_count": 3,
+      "avg_rating": 7.0,
+      "inspector_notes": "AC not working efficiently, floor needs deep cleaning"
+    },
+    {
+      "facility_id": "FAC004",
+      "hospital_name": "Government Hospital, Bangalore",
+      "room_id": "ROOM301",
+      "ward": "Orthopedics Ward",
+      "facility_type": "room",
+      "cleanliness_score": 9,
+      "comfort_score": 8,
+      "maintenance_status": "EXCELLENT",
+      "last_inspection_date": "2024-01-21",
+      "issues_count": 0,
+      "avg_rating": 8.5,
+      "inspector_notes": "Room well-maintained, excellent infrastructure"
+    },
+    {
+      "facility_id": "FAC005",
+      "hospital_name": "Government Hospital, Bangalore",
+      "food_id": "FOOD002",
+      "facility_type": "food",
+      "menu_variety": 7,
+      "taste_rating": 6,
+      "hygiene_score": 8,
+      "nutritional_value": 6,
+      "food_freshness": 7,
+      "avg_rating": 6.8,
+      "weekly_complaints": 1,
+      "inspector_notes": "Better variety, nutritional improvement needed"
+    },
+    {
+      "facility_id": "FAC006",
+      "hospital_name": "Government Hospital, Chennai",
+      "room_id": "ROOM401",
+      "ward": "Pediatrics Ward",
+      "facility_type": "room",
+      "cleanliness_score": 9,
+      "comfort_score": 9,
+      "maintenance_status": "EXCELLENT",
+      "last_inspection_date": "2024-01-18",
+      "issues_count": 0,
+      "avg_rating": 9.0,
+      "inspector_notes": "Outstanding condition, child-friendly environment"
+    },
+    {
+      "facility_id": "FAC007",
+      "hospital_name": "Government Hospital, Kolkata",
+      "room_id": "ROOM501",
+      "ward": "Surgery Ward",
+      "facility_type": "room",
+      "cleanliness_score": 6,
+      "comfort_score": 5,
+      "maintenance_status": "POOR",
+      "last_inspection_date": "2024-01-15",
+      "issues_count": 8,
+      "avg_rating": 5.5,
+      "inspector_notes": "Multiple maintenance issues, urgent repair required"
+    },
+    {
+      "facility_id": "FAC008",
+      "hospital_name": "Government Hospital, Pune",
+      "food_id": "FOOD003",
+      "facility_type": "food",
+      "menu_variety": 8,
+      "taste_rating": 7,
+      "hygiene_score": 9,
+      "nutritional_value": 8,
+      "food_freshness": 8,
+      "avg_rating": 8.0,
+      "weekly_complaints": 0,
+      "inspector_notes": "Good variety, high hygiene standards maintained"
+    }
+  ],
+  "benchmarks": {
+    "government_hospital_standards": {
+      "room_cleanliness_minimum": 7,
+      "room_comfort_minimum": 6,
+      "food_hygiene_minimum": 8,
+      "food_nutrition_minimum": 6,
+      "critical_maintenance_issues": 0,
+      "acceptable_complaints_per_month": 3
+    }
+  }
+}

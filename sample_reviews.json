@@ -1,0 +1,107 @@
+{
+  "reviews": [
+    {
+      "id": "REV001",
+      "hospital_name": "Government Hospital, Delhi",
+      "patient_name": "Rajesh Kumar",
+      "date": "2024-01-15",
+      "language": "hindi",
+      "category": "doctor_service",
+      "rating": 5,
+      "feedback": "डॉक्टर बहुत दयालु और चौकस थे। उन्होंने पूरे विस्तार से समस्या समझाई और सही उपचार दिया। अस्पताल का स्टाफ भी बहुत सहायक था।",
+      "english_translation": "The doctor was very kind and attentive. He explained the problem in detail and provided the right treatment. The hospital staff was also very helpful.",
+      "doctor_name": "Dr. Asha Singh",
+      "department": "General Medicine"
+    },
+    {
+      "id": "REV002",
+      "hospital_name": "Government Medical College Hospital, Mumbai",
+      "patient_name": "Priya Sharma",
+      "date": "2024-01-16",
+      "language": "english",
+      "category": "food_quality",
+      "rating": 3,
+      "feedback": "The food was average. Better nutritional options would be appreciated. Sometimes the meals were late.",
+      "doctor_name": "Dr. Vikram Mehta",
+      "department": "Cardiology"
+    },
+    {
+      "id": "REV003",
+      "hospital_name": "Government Hospital, Bangalore",
+      "patient_name": "Suresh Patel",
+      "date": "2024-01-17",
+      "language": "gujarati",
+      "category": "room_quality",
+      "rating": 4,
+      "feedback": "कमरा स्वच्छ था पर आरामदायक नहीं। एयर कंडीशनिंग सही तरीके से काम नहीं कर रहा था। साफ-सफाई अच्छी थी।",
+      "english_translation": "Room was clean but not comfortable. Air conditioning was not working properly. Cleanliness was good.",
+      "doctor_name": "Dr. Ramesh Gupta",
+      "department": "Orthopedics"
+    },
+    {
+      "id": "REV004",
+      "hospital_name": "Government Hospital, Chennai",
+      "patient_name": "Anita Roy",
+      "date": "2024-01-18",
+      "language": "tamil",
+      "category": "doctor_service",
+      "rating": 5,
+      "feedback": "அருமையான சிகிச்சை மற்றும் பேசும் முறை. மருத்துவர் நோயாளியின் கவலைகளை கேட்டுக் கொண்டார்.",
+      "english_translation": "Excellent treatment and manner of speaking. The doctor listened to patient concerns.",
+      "doctor_name": "Dr. Lakshmi Iyer",
+      "department": "Pediatrics"
+    },
+    {
+      "id": "REV005",
+      "hospital_name": "Government Hospital, Kolkata",
+      "patient_name": "Arun Das",
+      "date": "2024-01-19",
+      "language": "bengali",
+      "category": "general",
+      "rating": 2,
+      "feedback": "দীর্ঘ অপেক্ষার সময়। ডাক্তারের সাথে দেখা করার জন্য ৪ ঘন্টা অপেক্ষা করতে হয়েছে। সংস্থাপন উন্নত করা প্রয়োজন।",
+      "english_translation": "Long waiting times. Had to wait 4 hours to see the doctor. Administration needs improvement.",
+      "doctor_name": "Dr. Sanjay Chakraborty",
+      "department": "Surgery"
+    },
+    {
+      "id": "REV006",
+      "hospital_name": "Government Hospital, Pune",
+      "patient_name": "Meera Kulkarni",
+      "date": "2024-01-20",
+      "language": "marathi",
+      "category": "doctor_service",
+      "rating": 4,
+      "feedback": "डॉक्टर खूप सभ्य होते. काही विशेष गोष्टी चर्चा करायचे होते पण वेळाअभाव होता.",
+      "english_translation": "Doctor was very courteous. There were some special things to discuss but there was time constraint.",
+      "doctor_name": "Dr. Priya Joshi",
+      "department": "Gynecology"
+    },
+    {
+      "id": "REV007",
+      "hospital_name": "Government Hospital, Hyderabad",
+      "patient_name": "Ravi Naidu",
+      "date": "2024-01-21",
+      "language": "telugu",
+      "category": "food_quality",
+      "rating": 3,
+      "feedback": "ఆహారం సరిపోతుంది కానీ విటమిన్‌లు మరియు ఖనిజాలు సరిగా లేవు.",
+      "english_translation": "Food is adequate but lacks vitamins and minerals.",
+      "doctor_name": "Dr. Ramesh Reddy",
+      "department": "Internal Medicine"
+    },
+    {
+      "id": "REV008",
+      "hospital_name": "Government Hospital, Lucknow",
+      "patient_name": "Kavya Singh",
+      "date": "2024-01-22",
+      "language": "hindi",
+      "category": "room_quality",
+      "rating": 5,
+      "feedback": "कमरा बहुत स्वच्छ और सुविधाजनक था। कर्मचारी बहुत ध्यानपूर्वक सेवा प्रदान करते थे।",
+      "english_translation": "Room was very clean and convenient. Staff provided careful service.",
+      "doctor_name": "Dr. Anil Kumar",
+      "department": "Neurology"
+    }
+  ]
+}
