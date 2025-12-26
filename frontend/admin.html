@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Hospital Sentiment System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Mobile App Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="menu-btn" aria-label="menu">☰</button>
+                    <div class="app-title">
+                        <h1>Hospital Admin</h1>
+                        <p class="subtitle">Sentiment • Feedback • Alerts</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="timestamp" id="adminTime">--:--</span>
+                    <button id="btnReprocess" class="btn btn-secondary" title="Reprocess pending feedback">🔁 Reprocess Pending</button>
+                    <button class="btn btn-logout">Logout</button>
+                </div>
+            </header>
+            <!-- service-status banner removed per user preference -->
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="admin-section active">
+                    <h2>Dashboard Overview</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Total Reviews</h3>
+                            <p class="big-number" id="dashReviews">0</p>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Active Alerts</h3>
+                            <p class="big-number alert" id="dashAlerts">0</p>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Doctor Complaints</h3>
+                            <p class="big-number warning" id="dashComplaints">0</p>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Burnout Cases</h3>
+                            <p class="big-number critical" id="dashBurnout">0</p>
+                        </div>
+                    </div>
+                    <div class="chart-grid">
+                        <div class="chart-container">
+                            <canvas id="sentimentTrendChart" role="img" aria-label="Sentiment trend chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="issueClusterChart" role="img" aria-label="Issue cluster bar chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews (Voice vs Text) -->
+                    <div class="recent-reviews-card">
+                        <h3>Recent Patient Feedback</h3>
+                        <div class="recent-reviews-controls">
+                            <span>Showing latest reviews with sentiment & input method</span>
+                        </div>
+                        <div id="recentReviewCards" class="recent-review-cards" role="list" aria-live="polite" style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"></div>
+                        <div class="recent-reviews-table-wrapper">
+                            <table class="data-table recent-reviews-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Patient</th>
+                                        <th>Category</th>
+                                        <th>Sentiment</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                        <th>Input</th>
+                                        <th>Lang</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentReviewsBody">
+                                    <tr><td colspan="8">Waiting for data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Doctors Section -->
+                <section id="doctors-section" class="admin-section">
+                    <h2>Doctor Management</h2>
+                    <div class="section-controls">
+                        <input type="text" id="doctorSearch" placeholder="Search doctor...">
+                        <button class="btn btn-primary" onclick="showAddDoctorForm()">Add Doctor</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Doctor ID</th>
+                                <th>Name</th>
+                                <th>Rating</th>
+                                <th>Burnout Level</th>
+                                <th>Complaints</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctorsList">
+                            <tr><td colspan="6">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Complaints Section -->
+                <section id="complaints-section" class="admin-section">
+                    <h2>Complaint Management</h2>
+                    <div class="section-controls">
+                        <select id="complaintFilter">
+                            <option value="">All Statuses</option>
+                            <option value="OPEN">Open</option>
+                            <option value="IN_REVIEW">In Review</option>
+                            <option value="RESOLVED">Resolved</option>
+                        </select>
+                        <input type="text" id="complaintSearch" placeholder="Search complaints...">
+                    </div>
+                    <div id="complaintsList" class="complaints-list">
+                        <p>Loading...</p>
+                    </div>
+                </section>
+
+                <!-- Facility Section -->
+                <section id="facility-section" class="admin-section">
+                    <h2>Facility Quality Management</h2>
+                    <div class="facility-overview">
+                        <div class="facility-item">
+                            <h3>Food Quality</h3>
+                            <div class="quality-meter">
+                                <div class="quality-bar" id="foodQualityBar"></div>
+                            </div>
+                            <p id="foodQualityText">0.0 / 5</p>
+                        </div>
+                        <div class="facility-item">
+                            <h3>Room Cleanliness</h3>
+                            <div class="quality-meter">
+                                <div class="quality-bar" id="roomQualityBar"></div>
+                            </div>
+                            <p id="roomQualityText">0.0 / 5</p>
+                        </div>
+                    </div>
+                    <h3>Problem Areas</h3>
+                    <div id="problemAreasList" class="problem-areas">
+                        <p>Loading...</p>
+                    </div>
+                </section>
+
+                <!-- Alerts Section -->
+                <section id="alerts-section" class="admin-section">
+                    <h2>Alert Management</h2>
+                    <div class="section-controls">
+                        <select id="alertSeverityFilter">
+                            <option value="">All Severities</option>
+                            <option value="CRITICAL">Critical</option>
+                            <option value="HIGH">High</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="LOW">Low</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="refreshAlerts()">Refresh</button>
+                    </div>
+                    <div id="alertsList" class="alerts-management">
+                        <p>Loading...</p>
+                    </div>
+                </section>
+
+                <!-- QR Codes Section -->
+                <section id="qr-section" class="admin-section">
+                    <h2>QR Code Generation</h2>
+                    <div class="qr-generator">
+                        <div class="qr-form">
+                            <h3>Generate Feedback QR Code</h3>
+                            <select id="qrType" onchange="updateQRMetadata()">
+                                <option value="general">General Feedback</option>
+                                <option value="doctor">Doctor Feedback</option>
+                                <option value="food">Food Quality</option>
+                                <option value="room">Room Quality</option>
+                                <option value="complaint">Complaint</option>
+                            </select>
+                            <div id="qrMetadata"></div>
+                            <button id="qrGenerateBtn" type="button" class="btn btn-primary" onclick="generateQR()">Generate QR Code</button>
+                        </div>
+                        <div class="qr-display">
+                            <div id="qrResult" class="qr-result">
+                                <p>QR Code will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports-section" class="admin-section">
+                    <h2>Reports & Analytics</h2>
+                    <div class="reports-controls">
+                        <select id="reportType">
+                            <option value="sentiment">Sentiment Trends</option>
+                            <option value="complaints">Complaint Summary</option>
+                            <option value="facility">Facility Quality</option>
+                            <option value="burnout">Doctor Burnout</option>
+                        </select>
+                        <select id="reportPeriod">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                    </div>
+                    <div id="reportContent" class="report-content">
+                        <p>Select report parameters and click Generate Report</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Bottom Navigation (mobile app style) -->
+    <nav class="bottom-nav" role="navigation">
+        <ul>
+            <li><a href="#" class="nav-item active" data-section="dashboard" role="button" aria-pressed="true">📊<span>Home</span></a></li>
+            <li><a href="#" class="nav-item" data-section="doctors" role="button" aria-pressed="false">👨‍⚕️<span>Docs</span></a></li>
+            <li><a href="#" class="nav-item" data-section="complaints" role="button" aria-pressed="false">📋<span>Complaints</span></a></li>
+            <li><a href="#" class="nav-item" data-section="alerts" role="button" aria-pressed="false">🚨<span>Alerts</span></a></li>
+            <li><a href="#" class="nav-item" data-section="qr" role="button" aria-pressed="false">📱<span>QR</span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Floating Action Button -->
+    <button id="fabAdd" type="button" class="fab" title="Add" aria-label="Add">＋</button>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

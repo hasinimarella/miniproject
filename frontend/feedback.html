@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Voice Feedback - Hospital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/feedback-optimized.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="feedback-header">
+            <h1>🏥 Patient Feedback Portal</h1>
+            <p class="subtitle">Your voice matters - help us improve hospital services</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="feedback-main">
+                <!-- service-status banner removed per user preference -->
+            
+            <!-- Mode Selection -->
+            <div class="mode-selection">
+                <button class="mode-btn active" onclick="switchToVoiceMode()">🎤 Voice Feedback</button>
+                <button class="mode-btn" onclick="switchToTextMode()">✍️ Type Feedback</button>
+            </div>
+
+            <!-- Voice Mode Section -->
+            <section id="voiceModeSection" class="mode-section active">
+                <div class="voice-section">
+                    <h2>🎤 Record Your Feedback</h2>
+                    <p class="help-text">Click the button below and speak naturally. Your words will be converted to text.</p>
+                    
+                    <!-- Language Selector -->
+                    <div class="language-selector">
+                        <label for="voiceLanguage">Select Language:</label>
+                        <select id="voiceLanguage" onchange="changeLanguage(this.value)">
+                            <option value="en">🇬🇧 English</option>
+                            <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+                            <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+                            <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+                            <option value="gu">🇮🇳 ગુજરાતી (Gujarati)</option>
+                            <option value="bn">🇮🇳 বাংলা (Bengali)</option>
+                            <option value="mr">🇮🇳 मराठी (Marathi)</option>
+                            <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+                            <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
+                            <option value="ur">🇵🇰 اردو (Urdu)</option>
+                        </select>
+                    </div>
+
+                    <!-- Recording Controls -->
+                    <div class="recording-controls">
+                        <button type="button" id="startRecordBtn" class="btn btn-primary" onclick="startVoiceRecording()">
+                            🎤 Start Recording
+                        </button>
+                        <button type="button" id="stopRecordBtn" class="btn btn-danger" onclick="stopVoiceRecording()" disabled style="display:none;">
+                            ⏹️ Stop Recording
+                        </button>
+                    </div>
+
+                    <!-- Live Transcript Display -->
+                    <div id="transcriptContainer" class="transcript-container hidden">
+                        <div class="transcript-label">📝 What I heard:</div>
+                        <div id="liveTranscript" class="live-transcript">🎤 Listening...</div>
+                    </div>
+
+                    <!-- Error Display -->
+                    <div id="voiceError" class="error-message hidden"></div>
+
+                    <!-- Action Buttons -->
+                    <div class="voice-actions">
+                        <button type="button" class="btn btn-success" onclick="useRecordedVoice()">
+                            ✅ Use This Voice
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearVoiceRecording()">
+                            🗑️ Clear & Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Text Mode Section -->
+            <section id="textModeSection" class="mode-section hidden">
+                <form id="feedbackForm" class="feedback-form" onsubmit="submitFeedbackForm(event)">
+                    <h2>📝 Patient Feedback Form</h2>
+
+                    <!-- Patient Information -->
+                    <fieldset class="form-fieldset">
+                        <legend>📋 Your Information</legend>
+                        
+                        <div class="form-group">
+                            <label for="patientName">Patient Name (Optional):</label>
+                            <input type="text" id="patientName" placeholder="Your name (or leave blank for anonymous)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientPhone">Contact (Optional):</label>
+                            <input type="tel" id="patientPhone" placeholder="Phone or email (optional)">
+                        </div>
+                    </fieldset>
+
+                    <!-- Feedback Details -->
+                    <fieldset class="form-fieldset">
+                        <legend>⭐ Your Experience</legend>
+                        
+                        <div class="form-group">
+                            <label for="feedbackCategory">Feedback Category:</label>
+                            <select id="feedbackCategory" required>
+                                <option value="">-- Select a category --</option>
+                                <option value="general">📌 General Feedback</option>
+                                <option value="doctor_service">👨‍⚕️ Doctor / Clinical Care</option>
+                                <option value="nurse_care">👩‍⚕️ Nursing Care</option>
+                                <option value="food_quality">🍲 Food & Nutrition</option>
+                                <option value="room_cleanliness">🛏️ Room & Cleanliness</option>
+                                <option value="hospital_facilities">🏥 Hospital Facilities</option>
+                                <option value="wait_time">⏱️ Wait Times</option>
+                                <option value="complaint">⚠️ Complaint / Issue</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- Feedback Text -->
+                    <fieldset class="form-fieldset">
+                        <legend>💬 Your Feedback</legend>
+                        
+                        <div class="form-group">
+                            <label for="feedbackText">Tell us what you think:</label>
+                            <textarea id="feedbackText" placeholder="Share your feedback, suggestions, or concerns..." rows="8" required maxlength="5000"></textarea>
+                            <div class="char-count">
+                                <span id="charCount">0</span>/5000 characters
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Buttons -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                            📤 Submit Feedback
+                        </button>
+                        <button type="reset" class="btn btn-secondary" id="resetBtn">
+                            🔄 Clear Form
+                        </button>
+                    </div>
+
+                    <!-- Messages -->
+                    <div id="successMessage" class="message-box success hidden">
+                        <h3>✅ Thank You!</h3>
+                        <p id="successText"></p>
+                    </div>
+
+                    <div id="errorMessage" class="message-box error hidden">
+                        <h3>❌ Error</h3>
+                        <p id="errorText"></p>
+                    </div>
+                    
+                    <!-- Persistent submission status shown at page end -->
+                    <div id="submissionStatus" style="text-align:center;padding:12px;border-radius:8px;background:#f1f5f9;color:#0f172a;margin-top:16px;">
+                        <strong>Status:</strong> <span id="submissionStatusText">Not submitted</span>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="feedback-footer">
+            <p>Your feedback is valuable and helps us serve you better.</p>
+            <p class="privacy-note">🔒 Privacy: Your feedback is used only for hospital improvement.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/voice-recorder.js') }}"></script>
+    <script>
+        // service-status fetch removed (banner hidden by user request)
+
+        // Mode switching functions
+        function switchToVoiceMode() {
+            const voiceSection = document.getElementById('voiceModeSection');
+            const textSection = document.getElementById('textModeSection');
+            
+            // Show voice mode
+            if (voiceSection) {
+                voiceSection.classList.add('active');
+                voiceSection.classList.remove('hidden');
+            }
+            
+            // Hide text mode
+            if (textSection) {
+                textSection.classList.remove('active');
+                textSection.classList.add('hidden');
+            }
+            
+            // Update buttons
+            const buttons = document.querySelectorAll('.mode-btn');
+            if (buttons[0]) buttons[0].classList.add('active');
+            if (buttons[1]) buttons[1].classList.remove('active');
+            
+            console.log('🎤 Switched to voice mode');
+        }
+
+        function switchToTextMode() {
+            const voiceSection = document.getElementById('voiceModeSection');
+            const textSection = document.getElementById('textModeSection');
+            
+            // Hide voice mode
+            if (voiceSection) {
+                voiceSection.classList.remove('active');
+                voiceSection.classList.add('hidden');
+            }
+            
+            // Show text mode
+            if (textSection) {
+                textSection.classList.add('active');
+                textSection.classList.remove('hidden');
+            }
+            
+            // Update buttons
+            const buttons = document.querySelectorAll('.mode-btn');
+            if (buttons[0]) buttons[0].classList.remove('active');
+            if (buttons[1]) buttons[1].classList.add('active');
+            
+            console.log('✍️ Switched to text mode');
+        }
+
+        // Read optional doctor id from sessionStorage and expose to page
+        const currentDoctorId = sessionStorage.getItem('doctorId') || null;
+        if (currentDoctorId) {
+            // optionally show a small badge indicating logged-in doctor
+            const footer = document.querySelector('.feedback-footer');
+            if (footer) {
+                const badge = document.createElement('div');
+                badge.style.fontSize = '13px';
+                badge.style.color = '#0f172a';
+                badge.style.marginBottom = '6px';
+                badge.textContent = `Logged in as: ${currentDoctorId}`;
+                footer.insertBefore(badge, footer.firstChild);
+            }
+        }
+
+        // Form submission handler
+        function submitFeedbackForm(event) {
+            event.preventDefault();
+            console.log('📤 Form submitted');
+            
+            const patientName = document.getElementById('patientName').value.trim() || 'Anonymous';
+            const feedbackCategory = document.getElementById('feedbackCategory').value;
+            const feedbackText = document.getElementById('feedbackText').value.trim();
+            
+            console.log('📋 Data:', { patientName, feedbackCategory, feedbackTextLength: feedbackText.length });
+            
+            // Validation
+            if (!feedbackCategory) {
+                alert('❌ Please select a feedback category');
+                return false;
+            }
+            
+            if (!feedbackText || feedbackText.length === 0) {
+                alert('❌ Please provide your feedback');
+                return false;
+            }
+            
+            if (feedbackText.length > 5000) {
+                alert('❌ Feedback is too long. Maximum 5000 characters.');
+                return false;
+            }
+            
+            // Detect input method: default to "text", override if voice was used
+            let inputMethod = 'text';
+            try {
+                if (window.lastInputMethod === 'voice') {
+                    inputMethod = 'voice';
+                }
+            } catch (e) {
+                console.warn('Unable to read lastInputMethod flag:', e);
+            }
+
+            // Prepare payload
+            const payload = {
+                review_text: feedbackText,
+                patient_name: patientName,
+                category: feedbackCategory,
+                input_method: inputMethod,
+                doctor_id: currentDoctorId
+            };
+            
+            console.log('✅ Payload ready:', payload);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '⏳ Submitting...';
+            submitBtn.disabled = true;
+            
+            fetch('/api/reviews/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                console.log('📨 Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(error => {
+                        throw new Error(error.error || 'Server error');
+                    });
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log('✅ Success:', result);
+
+                // Show success details
+                document.getElementById('feedbackForm').style.display = 'none';
+                const successDiv = document.getElementById('successMessage');
+                const analysis = result.sentiment_analysis || {};
+
+                let html = '<p>Your feedback has been received. Thank you!</p>';
+                // show server review id
+                if (result.review_id) {
+                    html += `<p><strong>Reference ID:</strong> ${result.review_id}</p>`;
+                }
+
+                // If analysis was unavailable when saved, inform user
+                if (analysis.analysis_unavailable) {
+                    html += '<p>Your feedback was saved and will be analyzed when the analysis service becomes available.</p>';
+                } else {
+                    // show sentiment label/score when available
+                    const label = analysis.sentiment_label || 'Unknown';
+                    const score = typeof analysis.overall_score !== 'undefined' ? analysis.overall_score : null;
+                    html += `<p><strong>Sentiment:</strong> ${label}`;
+                    if (score !== null) html += ` (score: ${score})`;
+                    html += '</p>';
+                }
+
+                // Option: show detected emotions/keywords if present
+                if (analysis.emotions && Object.keys(analysis.emotions).length > 0) {
+                    try {
+                        const emos = Object.entries(analysis.emotions).map(e => `${e[0]}:${e[1]}`).join(', ');
+                        html += `<p><strong>Emotions:</strong> ${emos}</p>`;
+                    } catch (e) { /* ignore formatting errors */ }
+                }
+
+                // Add quick actions
+                // Prominent action buttons: large Home button and smaller "Submit Another"
+                html += '<div style="margin-top:12px">';
+                html += '<button class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:8px;" onclick="window.location.href=\'/\'">🏠 Back to Home</button>';
+                html += '<div style="text-align:center;">';
+                html += '<button class="btn btn-secondary" onclick="window.location.reload()">🔁 Submit Another</button>';
+                html += '</div>';
+                html += '</div>';
+
+                document.getElementById('successText').innerHTML = html;
+                successDiv.classList.remove('hidden');
+                // Update persistent status
+                try {
+                    const st = document.getElementById('submissionStatusText');
+                    if (st) {
+                        st.textContent = 'Submitted successfully';
+                        st.parentNode.style.background = '#ecfdf5';
+                        st.style.color = '#065f46';
+                    }
+                } catch (e) { /* ignore */ }
+            })
+            .catch(error => {
+                console.error('❌ Error:', error);
+                const errorDiv = document.getElementById('errorMessage');
+                document.getElementById('errorText').textContent = error.message;
+                errorDiv.classList.remove('hidden');
+                // Update persistent status to show failure
+                try {
+                    const st = document.getElementById('submissionStatusText');
+                    if (st) {
+                        st.textContent = 'Submission failed';
+                        st.parentNode.style.background = '#fff1f2';
+                        st.style.color = '#991b1b';
+                    }
+                } catch (e) { /* ignore */ }
+            })
+            .finally(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+            
+            return false;
+        }
+        
+        // Character counter
+        document.addEventListener('DOMContentLoaded', function() {
+            const feedbackText = document.getElementById('feedbackText');
+            if (feedbackText) {
+                feedbackText.addEventListener('input', (e) => {
+                    document.getElementById('charCount').textContent = e.target.value.length;
+                });
+            }
+        });
+    </script>
+    
+    <!-- Bottom navigation button to return to home for convenience -->
+    <div style="position:fixed;left:0;right:0;bottom:12px;padding:8px;display:flex;justify-content:center;pointer-events:auto;">
+        <button class="btn btn-primary" style="padding:12px 20px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.08);" onclick="window.location.href='/'">🏠 Back to Home</button>
+    </div>
+</body>
+</html>

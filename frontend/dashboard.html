@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - Hospital Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-new.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="nav-right">
+                    <span id="doctorNameDisplay" class="doctor-info">Dr. —</span>
+                    <button onclick="logout()" class="btn btn-logout">🚪 Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Stats Row -->
+            <section class="stats-section">
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Total Feedback</p>
+                        <p class="stat-value" id="totalFeedback">0</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">😊</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Positive</p>
+                        <p class="stat-value" id="positiveCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">😟</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Negative</p>
+                        <p class="stat-value" id="negativeCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">😐</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Neutral</p>
+                        <p class="stat-value" id="neutralCount">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Row -->
+            <section class="charts-row">
+                <div class="chart-card">
+                    <h3>📈 Sentiment Trend</h3>
+                    <canvas id="sentimentTrendChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>🎭 Sentiment Distribution</h3>
+                    <canvas id="sentimentDistributionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Emotions & Keywords Row -->
+            <section class="analysis-row">
+                <div class="analysis-card">
+                    <h3>😊 Top Emotions Detected</h3>
+                    <div id="emotionsList" class="list-container">
+                        <p class="placeholder">Loading...</p>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <h3>🏷️ Top Keywords & Topics</h3>
+                    <div id="keywordsList" class="list-container">
+                        <p class="placeholder">Loading...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feedback by Category -->
+            <section class="category-section">
+                <h3>📋 Feedback by Category</h3>
+                <div class="categories-grid" id="categoriesGrid">
+                    <p class="placeholder">Loading...</p>
+                </div>
+            </section>
+
+            <!-- Facility Quality -->
+            <section class="facility-section">
+                <h3>🏢 Facility Quality Scores</h3>
+                <div class="facility-grid">
+                    <div class="facility-card">
+                        <h4>🍽️ Food Quality</h4>
+                        <div class="quality-meter">
+                            <div class="quality-bar" id="foodBar"></div>
+                        </div>
+                        <p class="quality-score" id="foodScore">0.0/5.0</p>
+                    </div>
+                    <div class="facility-card">
+                        <h4>🏥 Room Cleanliness</h4>
+                        <div class="quality-meter">
+                            <div class="quality-bar" id="roomBar"></div>
+                        </div>
+                        <p class="quality-score" id="roomScore">0.0/5.0</p>
+                    </div>
+                    <div class="facility-card">
+                        <h4>👨‍⚕️ Staff Performance</h4>
+                        <div class="quality-meter">
+                            <div class="quality-bar" id="staffBar"></div>
+                        </div>
+                        <p class="quality-score" id="staffScore">0.0/5.0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerts & Issues -->
+            <section class="alerts-section">
+                <h3>⚠️ Critical Issues & Alerts</h3>
+                <div id="alertsList" class="alerts-container">
+                    <p class="placeholder">No critical issues detected. ✅</p>
+                </div>
+            </section>
+
+            <!-- Doctor-Specific Feedback -->
+            <section class="doctor-section">
+                <h3>👨‍⚕️ Your Doctor Performance</h3>
+                <div id="doctorFeedback" class="doctor-container">
+                    <p class="placeholder">Loading your feedback...</p>
+                </div>
+            </section>
+
+            <!-- Recent Feedback -->
+            <section class="recent-section">
+                <h3>📝 Recent Patient Feedback</h3>
+                <div id="recentFeedback" class="feedback-list">
+                    <p class="placeholder">Loading feedback...</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Hospital Sentiment Analysis System | Last Updated: <span id="lastUpdate">--:--</span></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard-new.js') }}"></script>
+</body>
+</html>
